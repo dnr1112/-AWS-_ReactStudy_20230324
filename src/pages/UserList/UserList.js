@@ -12,7 +12,8 @@ const UserList = () => {
         username: '',
         password: '',
         name: '',
-        email: ''
+        email: '',
+        modifyFlag: false
     }
 
     const userIndex = useRef(1);
@@ -58,6 +59,31 @@ const UserList = () => {
         setUsers(users.filter(user => user.id !== index));
     }
 
+    const onModify = (index) => {
+        setUsers(users.map(user => {
+            if(user.id === index){
+                setInputs({...user});
+                user.modifyFlag = true;
+            }else{
+                user.modifyFlag = false;
+            }
+            return user;
+        }));
+    }
+
+    const onSave = (index) => {
+        setUsers(users.map(user => {
+            if(user.id === index){
+                user.modifyFlag = true;
+                return {
+                    ...inputs,
+                    id: user.id
+                };
+            }
+            return user;
+        }));
+    }
+
 
     // const users = [
     //     {
@@ -88,10 +114,10 @@ const UserList = () => {
     return (
         <div css={S.Container}>
             <div>
-                <input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='username' name='username' value={inputs.username} ref={inputRefs[0]}/>
-                <input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='password' name='password' value={inputs.password} ref={inputRefs[1]}/>
-                <input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='name' name='name' value={inputs.name} ref={inputRefs[2]}/>
-                <input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='email' name='email' value={inputs.email} ref={inputRefs[3]}/>
+                <input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='username' name='username' ref={inputRefs[0]}/>
+                <input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='password' name='password' ref={inputRefs[1]}/>
+                <input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='name' name='name' ref={inputRefs[2]}/>
+                <input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='email' name='email' ref={inputRefs[3]}/>
 
                 <button type='button' onClick={addHandler} ref={addButtonRef}>추가</button>
             </div>
@@ -103,6 +129,7 @@ const UserList = () => {
                         <th css={S.ThAndTh}>password</th>
                         <th css={S.ThAndTh}>name</th>
                         <th css={S.ThAndTh}>email</th>
+                        <th css={S.ThAndTh}>modify</th>
                         <th css={S.ThAndTh}>delete</th>
                         
                     </tr>
@@ -112,10 +139,16 @@ const UserList = () => {
                         return(
                             <tr key={user.id}>
                                 <td css={S.ThAndTh}>{user.id}</td>
-                                <td css={S.ThAndTh}>{user.username}</td>
-                                <td css={S.ThAndTh}>{user.password}</td>
-                                <td css={S.ThAndTh}>{user.name}</td>
-                                <td css={S.ThAndTh}>{user.email}</td>
+                                <td css={S.ThAndTh}>{user.modifyFlag ? (<input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='username' name='username' ref={inputRefs[0]} defaultValue={user.username} />) : user.username}</td>
+                                <td css={S.ThAndTh}>{user.modifyFlag ? (<input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='password' name='password' ref={inputRefs[0]} defaultValue={user.password} />) : user.password}</td>
+                                <td css={S.ThAndTh}>{user.modifyFlag ? (<input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='name' name='name' ref={inputRefs[0]} defaultValue={user.name} />) : user.name}</td>
+                                <td css={S.ThAndTh}>{user.modifyFlag ? (<input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='email' name='email' ref={inputRefs[0]} defaultValue={user.email} />) : user.email}</td>
+                                <td css={S.ThAndTh}>
+                                    {user.modifyFlag
+                                        ? (<button onClick={() => onSave(user.id)}>확인</button>)
+                                        : (<button onClick={() => onModify(user.id)}>수정</button>)
+                                    }
+                                </td>
                                 <td css={S.ThAndTh}>
                                     <button onClick={() => onRemove(user.id)}>삭제</button>
                                 </td>

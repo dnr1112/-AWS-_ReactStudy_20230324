@@ -47,6 +47,11 @@ const MainAside = ({children}) => {
                             elemBefore: () => <FaUsers />
                         }
                     ]
+                },
+                {
+                    title: 'TodoList',
+                    itemId: '/todo',
+                    elemBefore: () => <BsCardChecklist />
                 }
             ]}
             />
