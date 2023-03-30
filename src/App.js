@@ -1,11 +1,13 @@
-
 import { Global } from '@emotion/react';
-import { Link, Route, Routes } from 'react-router-dom';
+import 'react-minimal-side-navigation/lib/ReactMinimalSideNavigation.css';
+import { Route, Routes } from 'react-router-dom';
 import MainAside from './components/Aside/MainAside/MainAside';
 import InputSample from './pages/InputSample/InputSample';
+import NumberCounter from './pages/NumberCounter/NumberCounter';
+import Project from './pages/Project/Project';
+import Todo from './pages/Todo/Todo';
 import UserList from './pages/UserList/UserList';
 import { reset } from './styles/Global/reset';
-import todo from './pages/todo/todo';
 
 function Test1() {
   return (<h1>Test1</h1>);
@@ -25,8 +27,10 @@ function App() {
         <Route path="/t1" Component={Test1}/>
         <Route path="/t2" Component={Test2}/>
         <Route path="/sample/input/1" Component={InputSample}/>
-        <Route path="/users" Component={UserList}/>
-        <Route path="/todo" Component={todo}/>
+        <Route path="/users" Component={UserList} />
+        <Route path="/todo" Component={Todo} />
+        <Route path="/project" Component={Project} />
+        <Route path="/number/count" Component={NumberCounter} />
       </Routes>
     </>
   );

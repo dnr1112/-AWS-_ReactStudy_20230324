@@ -4,10 +4,10 @@ import * as S from './style';
 
 const UserList = () => {
     useEffect(() => {
-        console.log("컵포넌트 랜더링");
+        console.log("컴포넌트 렌더링");
     }, []);
 
-    const user ={
+    const user = {
         id: 0,
         username: '',
         password: '',
@@ -20,14 +20,13 @@ const UserList = () => {
     const [users, setUsers] = useState([]);
     const [inputs, setInputs] = useState(user);
     const inputRefs = [useRef(), useRef(), useRef(), useRef()];
-
     const addButtonRef = useRef();
 
-    
     const inputHandler = (e) => {
-        const {name, value} = e.target;
-        setInputs({...inputs, [name]: value})
+        const { name, value } = e.target;
+        setInputs({...inputs, [name]: value});
     }
+
     const keyupHandler = (e) => {
         if(e.keyCode === 13) {
             let index = 0;
@@ -42,29 +41,30 @@ const UserList = () => {
             }
         }
     }
-    
-    const addHandler = (e) => {
+
+    const addHandler = () => {
         const user = {
             ...inputs
         };
 
         user.id = userIndex.current++;
+
         setUsers([...users, user]);
     }
 
     const onRemove = (index) => {
         // users.splice(index - 1, 1);
         // setUsers([...users]);
-
+        
         setUsers(users.filter(user => user.id !== index));
     }
 
     const onModify = (index) => {
         setUsers(users.map(user => {
-            if(user.id === index){
+            if(user.id === index) {
                 setInputs({...user});
                 user.modifyFlag = true;
-            }else{
+            }else {
                 user.modifyFlag = false;
             }
             return user;
@@ -73,11 +73,9 @@ const UserList = () => {
 
     const onSave = (index) => {
         setUsers(users.map(user => {
-            if(user.id === index){
-                user.modifyFlag = true;
+            if(user.id === index) {
                 return {
-                    ...inputs,
-                    id: user.id
+                    ...inputs
                 };
             }
             return user;
@@ -85,77 +83,49 @@ const UserList = () => {
     }
 
 
-    // const users = [
-    //     {
-    //         id: 1,
-    //         username: 'aaa',
-    //         password: '1234',
-    //         name: '가가가',
-    //         email: 'aaa@naver.com'
-    //     },
-    //     {
-    //         id: 2,
-    //         username: 'bbb',
-    //         password: '1234',
-    //         name: '나나나',
-    //         email: 'bbb@naver.com'
-    //     },
-    //     {
-    //         id: 3,
-    //         username: 'ccc',
-    //         password: '1234',
-    //         name: '다다다',
-    //         email: 'ccc@naver.com'
-    //     }
-    // ]
-
-    // const userIndex = useRef(4);
-
     return (
         <div css={S.Container}>
             <div>
-                <input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='username' name='username' ref={inputRefs[0]}/>
-                <input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='password' name='password' ref={inputRefs[1]}/>
-                <input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='name' name='name' ref={inputRefs[2]}/>
-                <input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='email' name='email' ref={inputRefs[3]}/>
-
+                <input css={S.Input} type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='username' name='username' ref={inputRefs[0]} defaultValue={inputs.username}/>
+                <input css={S.Input} type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='password' name='password' ref={inputRefs[1]} defaultValue={inputs.password}/>
+                <input css={S.Input} type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='name' name='name' ref={inputRefs[2]} defaultValue={inputs.name}/>
+                <input css={S.Input} type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='email' name='email' ref={inputRefs[3]} defaultValue={inputs.email}/>
                 <button type='button' onClick={addHandler} ref={addButtonRef}>추가</button>
             </div>
             <table css={S.Table}>
                 <thead>
                     <tr>
-                        <th css={S.ThAndTh}>index</th>
-                        <th css={S.ThAndTh}>username</th>
-                        <th css={S.ThAndTh}>password</th>
-                        <th css={S.ThAndTh}>name</th>
-                        <th css={S.ThAndTh}>email</th>
-                        <th css={S.ThAndTh}>modify</th>
-                        <th css={S.ThAndTh}>delete</th>
-                        
+                        <th css={S.ThAndTd}>index</th>
+                        <th css={S.ThAndTd}>username</th>
+                        <th css={S.ThAndTd}>password</th>
+                        <th css={S.ThAndTd}>name</th>
+                        <th css={S.ThAndTd}>email</th>
+                        <th css={S.ThAndTd}>update</th>
+                        <th css={S.ThAndTd}>delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     {users.map(user => {
-                        return(
+                        
+                        return (
                             <tr key={user.id}>
-                                <td css={S.ThAndTh}>{user.id}</td>
-                                <td css={S.ThAndTh}>{user.modifyFlag ? (<input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='username' name='username' ref={inputRefs[0]} defaultValue={user.username} />) : user.username}</td>
-                                <td css={S.ThAndTh}>{user.modifyFlag ? (<input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='password' name='password' ref={inputRefs[0]} defaultValue={user.password} />) : user.password}</td>
-                                <td css={S.ThAndTh}>{user.modifyFlag ? (<input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='name' name='name' ref={inputRefs[0]} defaultValue={user.name} />) : user.name}</td>
-                                <td css={S.ThAndTh}>{user.modifyFlag ? (<input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='email' name='email' ref={inputRefs[0]} defaultValue={user.email} />) : user.email}</td>
-                                <td css={S.ThAndTh}>
-                                    {user.modifyFlag
+                                <td css={S.ThAndTd}>{user.id}</td>
+                                <td css={S.ThAndTd}>{user.modifyFlag ? (<input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='username' name='username' ref={inputRefs[0]} defaultValue={user.username} />) : user.username}</td>
+                                <td css={S.ThAndTd}>{user.modifyFlag ? (<input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='password' name='password' ref={inputRefs[1]} defaultValue={user.password} />) : user.password}</td>
+                                <td css={S.ThAndTd}>{user.modifyFlag ? (<input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='name' name='name' ref={inputRefs[2]} defaultValue={user.name} />) : user.name}</td>
+                                <td css={S.ThAndTd}>{user.modifyFlag ? (<input type="text" onKeyUp={keyupHandler} onChange={inputHandler} placeholder='email' name='email' ref={inputRefs[3]} defaultValue={user.email} />) : user.email}</td>
+                                <td css={S.ThAndTd}>
+                                    {user.modifyFlag 
                                         ? (<button onClick={() => onSave(user.id)}>확인</button>)
-                                        : (<button onClick={() => onModify(user.id)}>수정</button>)
+                                        : (<button onClick={() => onModify(user.id)}>수정</button>) 
                                     }
                                 </td>
-                                <td css={S.ThAndTh}>
-                                    <button onClick={() => onRemove(user.id)}>삭제</button>
+                                <td css={S.ThAndTd}>
+                                    <button onClick={() => onRemove(user.id)}>삭제</button>    
                                 </td>
                             </tr>
                         );
                     })}
-
                 </tbody>
             </table>
         </div>
